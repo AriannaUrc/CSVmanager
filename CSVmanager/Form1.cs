@@ -70,28 +70,19 @@ namespace CSVmanager
             while (str != null)
             {
 
-                sw.WriteLine((str + separator + random.Next(10,21).ToString() + separator + "true" + separator).PadRight(60) + "##");
+                sw.WriteLine((str + separator + random.Next(10, 21).ToString() + separator + "true" + separator).PadRight(60) + "##");
                 str = sr.ReadLine();
             }
             sw.Close();
             sr.Close();
         }
 
-        public void AddPadding()
+        public static void scriviAppend(string content, string filename)
         {
-            StreamReader sr = new StreamReader(BackUp);
-            StreamWriter sw = new StreamWriter(FileName, false);
-
-            string str = sr.ReadLine();
-
-            while (str != null)
-            {
-
-                sw.WriteLine(str.PadRight(42));
-                str = sr.ReadLine();
-            }
+            var fStream = new FileStream(filename, FileMode.Append, FileAccess.Write, FileShare.Read);
+            StreamWriter sw = new StreamWriter(fStream);
+            sw.WriteLine(content);
             sw.Close();
-            sr.Close();
         }
 
         //prende una variabile dati e la transforma per renderla idonea ad essere scritta sul file
@@ -110,7 +101,7 @@ namespace CSVmanager
             p.winning_numbers = fields[1];
             p.mega_ball = int.Parse(fields[2]);
 
-            
+
 
             //controlla se il multiplier non é nullo
             if (fields[3] != "")
@@ -241,6 +232,35 @@ namespace CSVmanager
 
         }
 
+        public int findNumberOfFields()
+        {
+            String line;
+            byte[] br;
+
+            var f = new FileStream(FileName, FileMode.Open, FileAccess.ReadWrite);
+            BinaryReader reader = new BinaryReader(f);
+
+
+
+            string[] words = new string[4];
+
+
+            br = reader.ReadBytes(recordLength);
+            //converte in stringa
+            line = Encoding.ASCII.GetString(br, 0, br.Length);
+
+            //estraggo dalla stringa i valori e gli inserisco il d
+
+            String[] fields = line.Split(separator);
+            
+
+            reader.Close();
+            f.Close();
+
+            //meno 1 per tenere in considerazione l'ultima virgola
+            return fields.Length-1;
+        }
+
 
 
 
@@ -259,6 +279,11 @@ namespace CSVmanager
         private void Modify_button_Click(object sender, EventArgs e)
         {
             ModificaFile();
+        }
+
+        private void fields_num_button_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(findNumberOfFields().ToString());
         }
     }
 }

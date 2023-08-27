@@ -43,6 +43,7 @@
             label3 = new Label();
             modify_target = new ComboBox();
             label2 = new Label();
+            fields_num_button = new Button();
             groupBox1.SuspendLayout();
             SuspendLayout();
             // 
@@ -150,7 +151,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(317, 28);
+            label3.Location = new Point(321, 28);
             label3.Name = "label3";
             label3.Size = new Size(62, 15);
             label3.TabIndex = 9;
@@ -160,7 +161,7 @@
             // 
             modify_target.FormattingEnabled = true;
             modify_target.Items.AddRange(new object[] { "WinNumbers", "MegaBall", "Multiplier" });
-            modify_target.Location = new Point(192, 45);
+            modify_target.Location = new Point(191, 45);
             modify_target.Name = "modify_target";
             modify_target.Size = new Size(106, 23);
             modify_target.TabIndex = 7;
@@ -168,17 +169,28 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(226, 28);
+            label2.Location = new Point(223, 28);
             label2.Name = "label2";
             label2.Size = new Size(39, 15);
             label2.TabIndex = 6;
             label2.Text = "Target";
+            // 
+            // fields_num_button
+            // 
+            fields_num_button.Location = new Point(18, 415);
+            fields_num_button.Name = "fields_num_button";
+            fields_num_button.Size = new Size(100, 23);
+            fields_num_button.TabIndex = 10;
+            fields_num_button.Text = "Fields Number";
+            fields_num_button.UseVisualStyleBackColor = true;
+            fields_num_button.Click += fields_num_button_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(810, 457);
+            Controls.Add(fields_num_button);
             Controls.Add(groupBox1);
             Controls.Add(Add);
             Controls.Add(OpenButton);
@@ -208,5 +220,6 @@
         private ComboBox modify_target;
         private TextBox modify_new_value_textbox;
         private Label label3;
+        private Button fields_num_button;
     }
 }
