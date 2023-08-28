@@ -39,8 +39,18 @@
             modify_draw_date_textbox = new TextBox();
             label1 = new Label();
             groupBox1 = new GroupBox();
+            delete_target = new ComboBox();
+            label8 = new Label();
+            delete_value_textbox = new TextBox();
+            delete_button = new Button();
+            label9 = new Label();
+            find_target = new ComboBox();
+            label16 = new Label();
             add_multiplier_textbox = new TextBox();
+            find_value_textbox = new TextBox();
+            find_button = new Button();
             label7 = new Label();
+            label15 = new Label();
             add_win_numbers_textbox = new TextBox();
             add_mega_ball_textbox = new TextBox();
             label4 = new Label();
@@ -137,8 +147,18 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(delete_target);
+            groupBox1.Controls.Add(label8);
+            groupBox1.Controls.Add(delete_value_textbox);
+            groupBox1.Controls.Add(delete_button);
+            groupBox1.Controls.Add(label9);
+            groupBox1.Controls.Add(find_target);
+            groupBox1.Controls.Add(label16);
             groupBox1.Controls.Add(add_multiplier_textbox);
+            groupBox1.Controls.Add(find_value_textbox);
+            groupBox1.Controls.Add(find_button);
             groupBox1.Controls.Add(label7);
+            groupBox1.Controls.Add(label15);
             groupBox1.Controls.Add(add_win_numbers_textbox);
             groupBox1.Controls.Add(add_mega_ball_textbox);
             groupBox1.Controls.Add(label4);
@@ -160,12 +180,91 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "functions";
             // 
+            // delete_target
+            // 
+            delete_target.FormattingEnabled = true;
+            delete_target.Items.AddRange(new object[] { "DrawDate", "WinNumbers", "MegaBall", "Multiplier", "MioValore" });
+            delete_target.Location = new Point(95, 199);
+            delete_target.Name = "delete_target";
+            delete_target.Size = new Size(106, 23);
+            delete_target.TabIndex = 29;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(124, 182);
+            label8.Name = "label8";
+            label8.Size = new Size(39, 15);
+            label8.TabIndex = 28;
+            label8.Text = "Target";
+            // 
+            // delete_value_textbox
+            // 
+            delete_value_textbox.Location = new Point(216, 200);
+            delete_value_textbox.Name = "delete_value_textbox";
+            delete_value_textbox.Size = new Size(101, 23);
+            delete_value_textbox.TabIndex = 26;
+            // 
+            // delete_button
+            // 
+            delete_button.Location = new Point(7, 199);
+            delete_button.Name = "delete_button";
+            delete_button.Size = new Size(75, 23);
+            delete_button.TabIndex = 25;
+            delete_button.Text = "Delete";
+            delete_button.UseVisualStyleBackColor = true;
+            delete_button.Click += delete_button_Click;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(249, 182);
+            label9.Name = "label9";
+            label9.Size = new Size(35, 15);
+            label9.TabIndex = 27;
+            label9.Text = "Value";
+            // 
+            // find_target
+            // 
+            find_target.FormattingEnabled = true;
+            find_target.Items.AddRange(new object[] { "DrawDate", "WinNumbers", "MegaBall", "Multiplier" });
+            find_target.Location = new Point(97, 152);
+            find_target.Name = "find_target";
+            find_target.Size = new Size(106, 23);
+            find_target.TabIndex = 24;
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(126, 135);
+            label16.Name = "label16";
+            label16.Size = new Size(39, 15);
+            label16.TabIndex = 23;
+            label16.Text = "Target";
+            // 
             // add_multiplier_textbox
             // 
             add_multiplier_textbox.Location = new Point(333, 46);
             add_multiplier_textbox.Name = "add_multiplier_textbox";
             add_multiplier_textbox.Size = new Size(62, 23);
             add_multiplier_textbox.TabIndex = 18;
+            // 
+            // find_value_textbox
+            // 
+            find_value_textbox.Location = new Point(218, 153);
+            find_value_textbox.Name = "find_value_textbox";
+            find_value_textbox.Size = new Size(101, 23);
+            find_value_textbox.TabIndex = 21;
+            // 
+            // find_button
+            // 
+            find_button.Location = new Point(9, 152);
+            find_button.Name = "find_button";
+            find_button.Size = new Size(75, 23);
+            find_button.TabIndex = 20;
+            find_button.Text = "Find";
+            find_button.UseVisualStyleBackColor = true;
+            find_button.Click += find_button_Click;
             // 
             // label7
             // 
@@ -175,6 +274,15 @@
             label7.Size = new Size(58, 15);
             label7.TabIndex = 19;
             label7.Text = "Multiplier";
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(251, 135);
+            label15.Name = "label15";
+            label15.Size = new Size(35, 15);
+            label15.TabIndex = 22;
+            label15.Text = "Value";
             // 
             // add_win_numbers_textbox
             // 
@@ -335,5 +443,15 @@
         private Label label6;
         private TextBox add_multiplier_textbox;
         private Label label7;
+        private ComboBox find_target;
+        private Label label16;
+        private TextBox find_value_textbox;
+        private Button find_button;
+        private Label label15;
+        private ComboBox delete_target;
+        private Label label8;
+        private TextBox delete_value_textbox;
+        private Button delete_button;
+        private Label label9;
     }
 }

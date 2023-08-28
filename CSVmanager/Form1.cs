@@ -27,6 +27,7 @@ namespace CSVmanager
         public Form1()
         {
             InitializeComponent();
+            //recordLength = 64;
             recordLength = 64;
             FileName = "Lottery_Numbers.csv";
             BackUp = "BackUp.csv";
@@ -147,9 +148,12 @@ namespace CSVmanager
                 //estraggo dalla stringa i valori e gli inserisco il d
                 d = FromString(line);
 
-                //aggiunge alla lista i dati di d
-                ListViewItem item = new ListViewItem(new[] { d.draw_date, d.winning_numbers, d.mega_ball.ToString(), d.multiplier.ToString() });
-                listView.Items.Add(item);
+                if (d.cancLogic == true)
+                {
+                    //aggiunge alla lista i dati di d
+                    ListViewItem item = new ListViewItem(new[] { d.draw_date, d.winning_numbers, d.mega_ball.ToString(), d.multiplier.ToString() });
+                    listView.Items.Add(item);
+                }
 
             }
 
@@ -197,7 +201,7 @@ namespace CSVmanager
                 //estraggo dalla stringa i valori e gli inserisco il d
                 d = FromString(line);
 
-                if (d.draw_date == modify_draw_date_textbox.Text)
+                if (d.draw_date == modify_draw_date_textbox.Text && d.cancLogic == true)
                 {
                     switch (modify_target.Text)
                     {
@@ -237,6 +241,187 @@ namespace CSVmanager
                     f.Seek(-recordLength, SeekOrigin.Current);
                     writer.Write(Encoding.UTF8.GetBytes(FileString(d)));
                 }
+
+            }
+
+            writer.Close();
+            reader.Close();
+            f.Close();
+
+        }
+
+        public void FindInFile()
+        {
+            String line;
+            byte[] br;
+            bool NotValid = false;
+
+            var f = new FileStream(FileName, FileMode.Open, FileAccess.ReadWrite);
+            BinaryReader reader = new BinaryReader(f);
+
+
+
+            while (f.Position < f.Length - 2 && !NotValid)
+            {
+
+                br = reader.ReadBytes(recordLength);
+                //converte in stringa
+                line = Encoding.ASCII.GetString(br, 0, br.Length);
+
+                //estraggo dalla stringa i valori e gli inserisco il d
+                d = FromString(line);
+
+                switch (find_target.Text)
+                {
+
+                    case "DrawDate":
+                        if (d.draw_date == find_value_textbox.Text && d.cancLogic == true)
+                        {
+                            MessageBox.Show(line);
+                        }
+                        break;
+
+
+                    case "WinNumbers":
+                        if (d.winning_numbers == find_value_textbox.Text && d.cancLogic == true)
+                        {
+                            MessageBox.Show(line);
+                        }
+                        break;
+
+                    case "MegaBall":
+                        if (int.TryParse(find_value_textbox.Text, out int number) && d.mega_ball == int.Parse(find_value_textbox.Text) && d.cancLogic == true)
+                        {
+                            MessageBox.Show(line);
+                        }
+                        break;
+
+                    case "Multiplier":
+                        if (int.TryParse(find_value_textbox.Text, out int number1) && d.multiplier == int.Parse(find_value_textbox.Text) && d.cancLogic == true)
+                        {
+                            MessageBox.Show(line);
+                        }
+                        break;
+
+                    default:
+                        MessageBox.Show("valori inseriti non validi");
+                        NotValid = true;
+                        break;
+                }
+
+            }
+
+            reader.Close();
+            f.Close();
+
+        }
+
+
+        public void DeleteFile()//?????????s
+        {
+
+            String line;
+            byte[] br;
+
+            bool NotValid = false;
+
+            var f = new FileStream(FileName, FileMode.Open, FileAccess.ReadWrite);
+            BinaryReader reader = new BinaryReader(f);
+            BinaryWriter writer = new BinaryWriter(f);
+
+
+            while (f.Position < f.Length - 2 && !NotValid)
+            {
+
+                br = reader.ReadBytes(recordLength);
+                //converte in stringa
+                line = Encoding.ASCII.GetString(br, 0, br.Length);
+
+                //estraggo dalla stringa i valori e gli inserisco il d
+                d = FromString(line);
+
+                //MessageBox.Show(line);
+                
+                switch (delete_target.Text)
+                {
+                    case "DrawDate":
+                        if (d.draw_date == delete_value_textbox.Text)
+                        {
+                            d.cancLogic = false;
+
+                            f.Seek(-recordLength, SeekOrigin.Current);
+                            writer.Write(Encoding.UTF8.GetBytes(FileString(d)));
+                            //puts itself back to new line position
+                            f.Seek(2, SeekOrigin.Current);
+                        }
+                        break;
+
+                    case "WinNumbers":
+                        if (d.winning_numbers == delete_value_textbox.Text)
+                        {
+                            d.cancLogic = false;
+
+                            f.Seek(-recordLength, SeekOrigin.Current);
+                            writer.Write(Encoding.UTF8.GetBytes(FileString(d)));
+                            //puts itself back to new line position
+                            f.Seek(2, SeekOrigin.Current);
+                        }
+                        break;
+
+                    case "MegaBall":
+                        if (int.TryParse(delete_value_textbox.Text, out int number))
+                        {
+                            if (d.mega_ball == int.Parse(delete_value_textbox.Text))
+                            {
+                                d.cancLogic = false;
+
+                                f.Seek(-recordLength, SeekOrigin.Current);
+                                writer.Write(Encoding.UTF8.GetBytes(FileString(d)));
+                                //puts itself back to new line position
+                                f.Seek(2, SeekOrigin.Current);
+                            }
+                        }
+                        break;
+
+                    case "Multiplier":
+                        if (int.TryParse(delete_value_textbox.Text, out int number1))
+                        {
+                            if (d.multiplier == int.Parse(delete_value_textbox.Text))
+                            {
+                                d.cancLogic = false;
+
+                                f.Seek(-recordLength, SeekOrigin.Current);
+                                writer.Write(Encoding.UTF8.GetBytes(FileString(d)));
+                                //puts itself back to new line position
+                                f.Seek(2, SeekOrigin.Current);
+                            }
+                        }
+                        break;
+
+
+                    case "MioValore":
+                        if (int.TryParse(delete_value_textbox.Text, out int number2))
+                        {
+                            if (d.miovalore == int.Parse(delete_value_textbox.Text))
+                            {
+                                d.cancLogic = false;
+
+                                //MessageBox.Show(FileString(d));
+
+                                f.Seek(-recordLength, SeekOrigin.Current);
+                                writer.Write(Encoding.UTF8.GetBytes(FileString(d)));
+                                //puts itself back to new line position
+                                f.Seek(2, SeekOrigin.Current);
+                            }
+                        }
+                        break;
+
+                    default:
+                        MessageBox.Show("valori inseriti non validi");
+                        NotValid = true;
+                        break;
+                }
+
 
             }
 
@@ -292,16 +477,18 @@ namespace CSVmanager
                 //converte in stringa
                 line = Encoding.ASCII.GetString(br, 0, br.Length);
 
-                //estraggo dalla stringa i valori e gli inserisco il d
+                if (d.cancLogic == true)
+                {
+                    //estraggo dalla stringa i valori e gli inserisco il d
+                    String[] fields = line.Split(separator);
 
-                String[] fields = line.Split(separator);
 
-
-                for (int i = 0; i < fields.Length - 1; i++)
-                    if (maxLenght < fields[i].Length)
-                    {
-                        maxLenght = fields[i].Length;
-                    }
+                    for (int i = 0; i < fields.Length - 1; i++)
+                        if (maxLenght < fields[i].Length)
+                        {
+                            maxLenght = fields[i].Length;
+                        }
+                }
 
             }
 
@@ -344,7 +531,7 @@ namespace CSVmanager
 
         private void add_button_Click(object sender, EventArgs e)
         {
-            if(int.TryParse(add_mega_ball_textbox.Text, out int val) && int.TryParse(add_multiplier_textbox.Text, out int val1))
+            if (int.TryParse(add_mega_ball_textbox.Text, out int val) && int.TryParse(add_multiplier_textbox.Text, out int val1))
             {
                 AddFile(add_draw_date_textbox.Text, add_win_numbers_textbox.Text, int.Parse(add_mega_ball_textbox.Text), int.Parse(add_multiplier_textbox.Text));
             }
@@ -353,6 +540,16 @@ namespace CSVmanager
                 MessageBox.Show("i valori aggiunti non sono accettabili");
             }
 
+        }
+
+        private void find_button_Click(object sender, EventArgs e)
+        {
+            FindInFile();
+        }
+
+        private void delete_button_Click(object sender, EventArgs e)
+        {
+            DeleteFile();
         }
     }
 }
