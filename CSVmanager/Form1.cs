@@ -151,7 +151,7 @@ namespace CSVmanager
                 if (d.cancLogic == true)
                 {
                     //aggiunge alla lista i dati di d
-                    ListViewItem item = new ListViewItem(new[] { d.draw_date, d.winning_numbers, d.mega_ball.ToString(), d.multiplier.ToString() });
+                    ListViewItem item = new ListViewItem(new[] { d.draw_date, d.winning_numbers, d.multiplier.ToString() });
                     listView.Items.Add(item);
                 }
 
@@ -341,7 +341,7 @@ namespace CSVmanager
                 d = FromString(line);
 
                 //MessageBox.Show(line);
-                
+
                 switch (delete_target.Text)
                 {
                     case "DrawDate":

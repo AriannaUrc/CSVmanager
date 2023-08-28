@@ -31,7 +31,6 @@
             listView = new ListView();
             columnHeader1 = new ColumnHeader();
             columnHeader2 = new ColumnHeader();
-            columnHeader3 = new ColumnHeader();
             columnHeader4 = new ColumnHeader();
             OpenButton = new Button();
             Add = new Button();
@@ -70,7 +69,7 @@
             // listView
             // 
             listView.BackColor = SystemColors.InactiveBorder;
-            listView.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3, columnHeader4 });
+            listView.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader4 });
             listView.GridLines = true;
             listView.Location = new Point(434, 12);
             listView.Name = "listView";
@@ -82,22 +81,17 @@
             // columnHeader1
             // 
             columnHeader1.Text = "DrawDate";
-            columnHeader1.Width = 90;
+            columnHeader1.Width = 120;
             // 
             // columnHeader2
             // 
             columnHeader2.Text = "WinNumbers";
-            columnHeader2.Width = 90;
-            // 
-            // columnHeader3
-            // 
-            columnHeader3.Text = "MegaBall";
-            columnHeader3.Width = 90;
+            columnHeader2.Width = 120;
             // 
             // columnHeader4
             // 
             columnHeader4.Text = "Multiplier";
-            columnHeader4.Width = 90;
+            columnHeader4.Width = 120;
             // 
             // OpenButton
             // 
@@ -420,7 +414,6 @@
         private ListView listView;
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
-        private ColumnHeader columnHeader3;
         private ColumnHeader columnHeader4;
         private Button OpenButton;
         private Button Add;
