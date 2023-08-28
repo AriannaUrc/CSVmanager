@@ -20,7 +20,7 @@ namespace CSVmanager
         public int recordLength;
         public string separator;
 
-        public dati d;
+        public CSVDLL.csvFunctions.dati d;
         public string FileName;
         public string BackUp;
 
@@ -33,90 +33,11 @@ namespace CSVmanager
             BackUp = "BackUp.csv";
             separator = ",";
 
-            Format();
+            CSVDLL.csvFunctions.Format(BackUp, FileName, separator);
+            //Format();
+
             LoadFromFile();
         }
-
-
-        //dato un comando lo esegue appogiandosi allo shell
-        public void ExecuteCommand(string Command, string Arguments = "", string Path = "", bool ShellExecute = true)
-        {
-            ProcessStartInfo ProcessInfo = new ProcessStartInfo(Command);
-
-            if (Path != "")
-            {
-                ProcessInfo.WorkingDirectory = Path;
-            }
-            if (Arguments != "")
-            {
-                ProcessInfo.Arguments = Arguments;
-            }
-            ProcessInfo.CreateNoWindow = true;
-            ProcessInfo.UseShellExecute = ShellExecute;
-
-            //Process Process =
-            Process.Start(ProcessInfo);
-        }
-
-
-        //rende il file utilizzabile per l'accesso diretto
-        public void Format()
-        {
-            StreamReader sr = new StreamReader(BackUp);
-            StreamWriter sw = new StreamWriter(FileName, false);
-
-            string str = sr.ReadLine();
-            Random random = new Random();
-
-            while (str != null)
-            {
-
-                sw.WriteLine((str + separator + random.Next(10, 21).ToString() + separator + "true" + separator).PadRight(60) + "##");
-                str = sr.ReadLine();
-            }
-            sw.Close();
-            sr.Close();
-        }
-
-        public static void scriviAppend(string content, string filename)
-        {
-            var fStream = new FileStream(filename, FileMode.Append, FileAccess.Write, FileShare.Read);
-            StreamWriter sw = new StreamWriter(fStream);
-            sw.WriteLine(content);
-            sw.Close();
-        }
-
-        //prende una variabile dati e la transforma per renderla idonea ad essere scritta sul file
-        public string FileString(dati d)
-        {
-            return ((d.draw_date + separator + d.winning_numbers + separator + d.mega_ball + separator + d.multiplier + separator + d.miovalore + separator + d.cancLogic + separator).PadRight(60) + "##");
-        }
-
-        public static dati FromString(string temp, string sep = ",")
-        {
-            //MessageBox.Show(temp);
-            dati p;
-            String[] fields = temp.Split(sep[0]);
-            //MessageBox.Show(fields[3]);
-            p.draw_date = fields[0];
-            p.winning_numbers = fields[1];
-            p.mega_ball = int.Parse(fields[2]);
-
-
-
-            //controlla se il multiplier non é nullo
-            if (fields[3] != "")
-                p.multiplier = int.Parse(fields[3]);
-            else
-                p.multiplier = 1;
-
-            p.miovalore = int.Parse(fields[4]);
-            p.cancLogic = bool.Parse(fields[5]);
-
-            //dalla stringa deve ritornare la variabile dati p settata con i valori estratti
-            return p;
-        }
-
 
         public void LoadFromFile(bool showw = false)
         {
@@ -146,7 +67,7 @@ namespace CSVmanager
                     MessageBox.Show(line);
                 }
                 //estraggo dalla stringa i valori e gli inserisco il d
-                d = FromString(line);
+                d = CSVDLL.csvFunctions.FromString(line);
 
                 if (d.cancLogic == true)
                 {
@@ -163,350 +84,11 @@ namespace CSVmanager
 
         }
 
-        public void AddFile(string drawDate, string WinNumbers, int MegaBall, int Multiplier)
-        {
-            Random random = new Random();
-
-            d.draw_date = drawDate;
-            d.winning_numbers = WinNumbers;
-            d.mega_ball = MegaBall;
-            d.multiplier = Multiplier;
-            d.miovalore = random.Next(10, 21);
-            d.cancLogic = true;
-
-            scriviAppend(FileString(d), FileName);
-        }
-
-        public void ModificaFile()
-        {
-            String line;
-            byte[] br;
-
-            var f = new FileStream(FileName, FileMode.Open, FileAccess.ReadWrite);
-            BinaryReader reader = new BinaryReader(f);
-            BinaryWriter writer = new BinaryWriter(f);
-
-
-
-            string[] words = new string[4];
-
-
-            while (f.Position < f.Length - 2)
-            {
-
-                br = reader.ReadBytes(recordLength);
-                //converte in stringa
-                line = Encoding.ASCII.GetString(br, 0, br.Length);
-
-                //estraggo dalla stringa i valori e gli inserisco il d
-                d = FromString(line);
-
-                if (d.draw_date == modify_draw_date_textbox.Text && d.cancLogic == true)
-                {
-                    switch (modify_target.Text)
-                    {
-                        case "WinNumbers":
-                            //MessageBox.Show("you are in modif winnumbers");
-                            d.winning_numbers = modify_new_value_textbox.Text;
-                            break;
-
-                        case "MegaBall":
-                            if (int.TryParse(modify_new_value_textbox.Text, out int number))
-                            {
-                                d.mega_ball = int.Parse(modify_new_value_textbox.Text);
-                            }
-                            else
-                            {
-                                MessageBox.Show("il valore inserito non è valido");
-                            }
-                            break;
-
-                        case "Multiplier":
-                            if (int.TryParse(modify_new_value_textbox.Text, out int number1))
-                            {
-                                d.multiplier = int.Parse(modify_new_value_textbox.Text);
-                            }
-                            else
-                            {
-                                MessageBox.Show("il valore inserito non è valido");
-                            }
-                            break;
-
-                        default:
-                            MessageBox.Show("valori inseriti non validi");
-                            break;
-                    }
-
-
-                    f.Seek(-recordLength, SeekOrigin.Current);
-                    writer.Write(Encoding.UTF8.GetBytes(FileString(d)));
-                }
-
-            }
-
-            writer.Close();
-            reader.Close();
-            f.Close();
-
-        }
-
-        public void FindInFile()
-        {
-            String line;
-            byte[] br;
-            bool NotValid = false;
-
-            var f = new FileStream(FileName, FileMode.Open, FileAccess.ReadWrite);
-            BinaryReader reader = new BinaryReader(f);
-
-
-
-            while (f.Position < f.Length - 2 && !NotValid)
-            {
-
-                br = reader.ReadBytes(recordLength);
-                //converte in stringa
-                line = Encoding.ASCII.GetString(br, 0, br.Length);
-
-                //estraggo dalla stringa i valori e gli inserisco il d
-                d = FromString(line);
-
-                switch (find_target.Text)
-                {
-
-                    case "DrawDate":
-                        if (d.draw_date == find_value_textbox.Text && d.cancLogic == true)
-                        {
-                            MessageBox.Show(line);
-                        }
-                        break;
-
-
-                    case "WinNumbers":
-                        if (d.winning_numbers == find_value_textbox.Text && d.cancLogic == true)
-                        {
-                            MessageBox.Show(line);
-                        }
-                        break;
-
-                    case "MegaBall":
-                        if (int.TryParse(find_value_textbox.Text, out int number) && d.mega_ball == int.Parse(find_value_textbox.Text) && d.cancLogic == true)
-                        {
-                            MessageBox.Show(line);
-                        }
-                        break;
-
-                    case "Multiplier":
-                        if (int.TryParse(find_value_textbox.Text, out int number1) && d.multiplier == int.Parse(find_value_textbox.Text) && d.cancLogic == true)
-                        {
-                            MessageBox.Show(line);
-                        }
-                        break;
-
-                    default:
-                        MessageBox.Show("valori inseriti non validi");
-                        NotValid = true;
-                        break;
-                }
-
-            }
-
-            reader.Close();
-            f.Close();
-
-        }
-
-
-        public void DeleteFile()//?????????s
-        {
-
-            String line;
-            byte[] br;
-
-            bool NotValid = false;
-
-            var f = new FileStream(FileName, FileMode.Open, FileAccess.ReadWrite);
-            BinaryReader reader = new BinaryReader(f);
-            BinaryWriter writer = new BinaryWriter(f);
-
-
-            while (f.Position < f.Length - 2 && !NotValid)
-            {
-
-                br = reader.ReadBytes(recordLength);
-                //converte in stringa
-                line = Encoding.ASCII.GetString(br, 0, br.Length);
-
-                //estraggo dalla stringa i valori e gli inserisco il d
-                d = FromString(line);
-
-                //MessageBox.Show(line);
-
-                switch (delete_target.Text)
-                {
-                    case "DrawDate":
-                        if (d.draw_date == delete_value_textbox.Text)
-                        {
-                            d.cancLogic = false;
-
-                            f.Seek(-recordLength, SeekOrigin.Current);
-                            writer.Write(Encoding.UTF8.GetBytes(FileString(d)));
-                            //puts itself back to new line position
-                            f.Seek(2, SeekOrigin.Current);
-                        }
-                        break;
-
-                    case "WinNumbers":
-                        if (d.winning_numbers == delete_value_textbox.Text)
-                        {
-                            d.cancLogic = false;
-
-                            f.Seek(-recordLength, SeekOrigin.Current);
-                            writer.Write(Encoding.UTF8.GetBytes(FileString(d)));
-                            //puts itself back to new line position
-                            f.Seek(2, SeekOrigin.Current);
-                        }
-                        break;
-
-                    case "MegaBall":
-                        if (int.TryParse(delete_value_textbox.Text, out int number))
-                        {
-                            if (d.mega_ball == int.Parse(delete_value_textbox.Text))
-                            {
-                                d.cancLogic = false;
-
-                                f.Seek(-recordLength, SeekOrigin.Current);
-                                writer.Write(Encoding.UTF8.GetBytes(FileString(d)));
-                                //puts itself back to new line position
-                                f.Seek(2, SeekOrigin.Current);
-                            }
-                        }
-                        break;
-
-                    case "Multiplier":
-                        if (int.TryParse(delete_value_textbox.Text, out int number1))
-                        {
-                            if (d.multiplier == int.Parse(delete_value_textbox.Text))
-                            {
-                                d.cancLogic = false;
-
-                                f.Seek(-recordLength, SeekOrigin.Current);
-                                writer.Write(Encoding.UTF8.GetBytes(FileString(d)));
-                                //puts itself back to new line position
-                                f.Seek(2, SeekOrigin.Current);
-                            }
-                        }
-                        break;
-
-
-                    case "MioValore":
-                        if (int.TryParse(delete_value_textbox.Text, out int number2))
-                        {
-                            if (d.miovalore == int.Parse(delete_value_textbox.Text))
-                            {
-                                d.cancLogic = false;
-
-                                //MessageBox.Show(FileString(d));
-
-                                f.Seek(-recordLength, SeekOrigin.Current);
-                                writer.Write(Encoding.UTF8.GetBytes(FileString(d)));
-                                //puts itself back to new line position
-                                f.Seek(2, SeekOrigin.Current);
-                            }
-                        }
-                        break;
-
-                    default:
-                        MessageBox.Show("valori inseriti non validi");
-                        NotValid = true;
-                        break;
-                }
-
-
-            }
-
-            writer.Close();
-            reader.Close();
-            f.Close();
-
-        }
-
-        public int findNumberOfFields()
-        {
-            String line;
-            byte[] br;
-
-            var f = new FileStream(FileName, FileMode.Open, FileAccess.ReadWrite);
-            BinaryReader reader = new BinaryReader(f);
-
-
-
-            string[] words = new string[4];
-
-
-            br = reader.ReadBytes(recordLength);
-            //converte in stringa
-            line = Encoding.ASCII.GetString(br, 0, br.Length);
-
-            //estraggo dalla stringa i valori e gli inserisco il d
-
-            String[] fields = line.Split(separator);
-
-
-            reader.Close();
-            f.Close();
-
-            //meno 1 per tenere in considerazione l'ultima virgola
-            return fields.Length - 1;
-        }
-
-        public int MaxFieldLenght()
-        {
-            int maxLenght = 0;
-
-            String line;
-            byte[] br;
-
-            var f = new FileStream(FileName, FileMode.Open, FileAccess.ReadWrite);
-            BinaryReader reader = new BinaryReader(f);
-
-
-            while (f.Position < f.Length - 2)
-            {
-                br = reader.ReadBytes(recordLength);
-                //converte in stringa
-                line = Encoding.ASCII.GetString(br, 0, br.Length);
-
-                if (d.cancLogic == true)
-                {
-                    //estraggo dalla stringa i valori e gli inserisco il d
-                    String[] fields = line.Split(separator);
-
-
-                    for (int i = 0; i < fields.Length - 1; i++)
-                        if (maxLenght < fields[i].Length)
-                        {
-                            maxLenght = fields[i].Length;
-                        }
-                }
-
-            }
-
-            reader.Close();
-            f.Close();
-
-            //meno 1 per tenere in considerazione l'ultima virgola
-            return maxLenght;
-        }
-
-
-
-
         //windows form functions
         private void OpenButton_Click(object sender, EventArgs e)
         {
 
-            ExecuteCommand(FileName);
+            CSVDLL.csvFunctions.ExecuteCommand(FileName);
         }
 
         private void Add_Click(object sender, EventArgs e)
@@ -516,24 +98,31 @@ namespace CSVmanager
 
         private void Modify_button_Click(object sender, EventArgs e)
         {
-            ModificaFile();
+            //ModificaFile();
+            if (CSVDLL.csvFunctions.ModificaFile(modify_draw_date_textbox.Text, modify_target.Text, modify_new_value_textbox.Text, FileName, recordLength, d, separator) == 1)
+            {
+                MessageBox.Show("valori inseriti non validi");
+            }
+            
         }
 
         private void fields_num_button_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(findNumberOfFields().ToString());
+            //MessageBox.Show(findNumberOfFields().ToString());
+            MessageBox.Show(CSVDLL.csvFunctions.findNumberOfFields(FileName, recordLength, d, separator).ToString());
         }
 
         private void max_field_button_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(MaxFieldLenght().ToString());
+            //MessageBox.Show(MaxFieldLenght().ToString());
+            MessageBox.Show(CSVDLL.csvFunctions.MaxFieldLenght(FileName, recordLength, d, separator).ToString());
         }
 
         private void add_button_Click(object sender, EventArgs e)
         {
             if (int.TryParse(add_mega_ball_textbox.Text, out int val) && int.TryParse(add_multiplier_textbox.Text, out int val1))
             {
-                AddFile(add_draw_date_textbox.Text, add_win_numbers_textbox.Text, int.Parse(add_mega_ball_textbox.Text), int.Parse(add_multiplier_textbox.Text));
+                CSVDLL.csvFunctions.AddFile(add_draw_date_textbox.Text, add_win_numbers_textbox.Text, int.Parse(add_mega_ball_textbox.Text), int.Parse(add_multiplier_textbox.Text), d, separator, FileName);
             }
             else
             {
@@ -544,12 +133,17 @@ namespace CSVmanager
 
         private void find_button_Click(object sender, EventArgs e)
         {
-            FindInFile();
+            //FindInFile();
+            MessageBox.Show(CSVDLL.csvFunctions.FindLineInFile(find_target.Text, find_value_textbox.Text, FileName, recordLength, d, separator));
         }
 
         private void delete_button_Click(object sender, EventArgs e)
         {
-            DeleteFile();
+            //DeleteFile();
+            if(CSVDLL.csvFunctions.DeleteFile(delete_target.Text, delete_value_textbox.Text, FileName, recordLength, d, separator) == 1)
+            {
+                MessageBox.Show("valori inseriti non validi");
+            }
         }
     }
 }
