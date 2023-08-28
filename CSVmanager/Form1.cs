@@ -252,13 +252,50 @@ namespace CSVmanager
             //estraggo dalla stringa i valori e gli inserisco il d
 
             String[] fields = line.Split(separator);
-            
+
 
             reader.Close();
             f.Close();
 
             //meno 1 per tenere in considerazione l'ultima virgola
-            return fields.Length-1;
+            return fields.Length - 1;
+        }
+
+        public int MaxFieldLenght()
+        {
+            int maxLenght = 0;
+
+            String line;
+            byte[] br;
+
+            var f = new FileStream(FileName, FileMode.Open, FileAccess.ReadWrite);
+            BinaryReader reader = new BinaryReader(f);
+
+
+            while (f.Position < f.Length - 2)
+            {
+                br = reader.ReadBytes(recordLength);
+                //converte in stringa
+                line = Encoding.ASCII.GetString(br, 0, br.Length);
+
+                //estraggo dalla stringa i valori e gli inserisco il d
+
+                String[] fields = line.Split(separator);
+
+
+                for (int i = 0; i < fields.Length - 1; i++)
+                    if (maxLenght < fields[i].Length)
+                    {
+                        maxLenght = fields[i].Length;
+                    }
+
+            }
+
+            reader.Close();
+            f.Close();
+
+            //meno 1 per tenere in considerazione l'ultima virgola
+            return maxLenght;
         }
 
 
@@ -284,6 +321,11 @@ namespace CSVmanager
         private void fields_num_button_Click(object sender, EventArgs e)
         {
             MessageBox.Show(findNumberOfFields().ToString());
+        }
+
+        private void max_field_button_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(MaxFieldLenght().ToString());
         }
     }
 }
