@@ -88,7 +88,7 @@ namespace CSVmanager
         //prende una variabile dati e la transforma per renderla idonea ad essere scritta sul file
         public string FileString(dati d)
         {
-            return ((d.draw_date + separator + d.winning_numbers + separator + d.mega_ball + separator + d.multiplier + separator).PadRight(60) + "##");
+            return ((d.draw_date + separator + d.winning_numbers + separator + d.mega_ball + separator + d.multiplier + separator + d.miovalore + separator + d.cancLogic + separator).PadRight(60) + "##");
         }
 
         public static dati FromString(string temp, string sep = ",")
@@ -157,6 +157,20 @@ namespace CSVmanager
             reader.Close();
             f.Close();
 
+        }
+
+        public void AddFile(string drawDate, string WinNumbers, int MegaBall, int Multiplier)
+        {
+            Random random = new Random();
+
+            d.draw_date = drawDate;
+            d.winning_numbers = WinNumbers;
+            d.mega_ball = MegaBall;
+            d.multiplier = Multiplier;
+            d.miovalore = random.Next(10, 21);
+            d.cancLogic = true;
+
+            scriviAppend(FileString(d), FileName);
         }
 
         public void ModificaFile()
@@ -326,6 +340,19 @@ namespace CSVmanager
         private void max_field_button_Click(object sender, EventArgs e)
         {
             MessageBox.Show(MaxFieldLenght().ToString());
+        }
+
+        private void add_button_Click(object sender, EventArgs e)
+        {
+            if(int.TryParse(add_mega_ball_textbox.Text, out int val) && int.TryParse(add_multiplier_textbox.Text, out int val1))
+            {
+                AddFile(add_draw_date_textbox.Text, add_win_numbers_textbox.Text, int.Parse(add_mega_ball_textbox.Text), int.Parse(add_multiplier_textbox.Text));
+            }
+            else
+            {
+                MessageBox.Show("i valori aggiunti non sono accettabili");
+            }
+
         }
     }
 }

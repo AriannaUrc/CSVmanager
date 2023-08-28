@@ -39,6 +39,15 @@
             modify_draw_date_textbox = new TextBox();
             label1 = new Label();
             groupBox1 = new GroupBox();
+            add_multiplier_textbox = new TextBox();
+            label7 = new Label();
+            add_win_numbers_textbox = new TextBox();
+            add_mega_ball_textbox = new TextBox();
+            label4 = new Label();
+            label5 = new Label();
+            add_draw_date_textbox = new TextBox();
+            add_button = new Button();
+            label6 = new Label();
             modify_new_value_textbox = new TextBox();
             label3 = new Label();
             modify_target = new ComboBox();
@@ -102,7 +111,7 @@
             // 
             // Modify_button
             // 
-            Modify_button.Location = new Point(6, 45);
+            Modify_button.Location = new Point(7, 101);
             Modify_button.Name = "Modify_button";
             Modify_button.Size = new Size(75, 23);
             Modify_button.TabIndex = 3;
@@ -112,7 +121,7 @@
             // 
             // modify_draw_date_textbox
             // 
-            modify_draw_date_textbox.Location = new Point(96, 46);
+            modify_draw_date_textbox.Location = new Point(97, 102);
             modify_draw_date_textbox.Name = "modify_draw_date_textbox";
             modify_draw_date_textbox.Size = new Size(90, 23);
             modify_draw_date_textbox.TabIndex = 4;
@@ -120,7 +129,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(107, 28);
+            label1.Location = new Point(108, 84);
             label1.Name = "label1";
             label1.Size = new Size(60, 15);
             label1.TabIndex = 5;
@@ -128,6 +137,15 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(add_multiplier_textbox);
+            groupBox1.Controls.Add(label7);
+            groupBox1.Controls.Add(add_win_numbers_textbox);
+            groupBox1.Controls.Add(add_mega_ball_textbox);
+            groupBox1.Controls.Add(label4);
+            groupBox1.Controls.Add(label5);
+            groupBox1.Controls.Add(add_draw_date_textbox);
+            groupBox1.Controls.Add(add_button);
+            groupBox1.Controls.Add(label6);
             groupBox1.Controls.Add(modify_new_value_textbox);
             groupBox1.Controls.Add(label3);
             groupBox1.Controls.Add(modify_target);
@@ -142,9 +160,83 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "functions";
             // 
+            // add_multiplier_textbox
+            // 
+            add_multiplier_textbox.Location = new Point(333, 46);
+            add_multiplier_textbox.Name = "add_multiplier_textbox";
+            add_multiplier_textbox.Size = new Size(62, 23);
+            add_multiplier_textbox.TabIndex = 18;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(337, 28);
+            label7.Name = "label7";
+            label7.Size = new Size(58, 15);
+            label7.TabIndex = 19;
+            label7.Text = "Multiplier";
+            // 
+            // add_win_numbers_textbox
+            // 
+            add_win_numbers_textbox.Location = new Point(171, 46);
+            add_win_numbers_textbox.Name = "add_win_numbers_textbox";
+            add_win_numbers_textbox.Size = new Size(80, 23);
+            add_win_numbers_textbox.TabIndex = 17;
+            // 
+            // add_mega_ball_textbox
+            // 
+            add_mega_ball_textbox.Location = new Point(257, 46);
+            add_mega_ball_textbox.Name = "add_mega_ball_textbox";
+            add_mega_ball_textbox.Size = new Size(70, 23);
+            add_mega_ball_textbox.TabIndex = 15;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(257, 28);
+            label4.Name = "label4";
+            label4.Size = new Size(62, 15);
+            label4.TabIndex = 16;
+            label4.Text = "  MegaBall";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(171, 29);
+            label5.Name = "label5";
+            label5.Size = new Size(80, 15);
+            label5.TabIndex = 13;
+            label5.Text = " WinNumbers";
+            // 
+            // add_draw_date_textbox
+            // 
+            add_draw_date_textbox.Location = new Point(95, 46);
+            add_draw_date_textbox.Name = "add_draw_date_textbox";
+            add_draw_date_textbox.Size = new Size(71, 23);
+            add_draw_date_textbox.TabIndex = 11;
+            // 
+            // add_button
+            // 
+            add_button.Location = new Point(5, 46);
+            add_button.Name = "add_button";
+            add_button.Size = new Size(75, 23);
+            add_button.TabIndex = 10;
+            add_button.Text = "Add";
+            add_button.UseVisualStyleBackColor = true;
+            add_button.Click += add_button_Click;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(95, 28);
+            label6.Name = "label6";
+            label6.Size = new Size(63, 15);
+            label6.TabIndex = 12;
+            label6.Text = " Draw date";
+            // 
             // modify_new_value_textbox
             // 
-            modify_new_value_textbox.Location = new Point(306, 46);
+            modify_new_value_textbox.Location = new Point(307, 102);
             modify_new_value_textbox.Name = "modify_new_value_textbox";
             modify_new_value_textbox.Size = new Size(90, 23);
             modify_new_value_textbox.TabIndex = 8;
@@ -152,7 +244,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(321, 28);
+            label3.Location = new Point(322, 84);
             label3.Name = "label3";
             label3.Size = new Size(62, 15);
             label3.TabIndex = 9;
@@ -162,7 +254,7 @@
             // 
             modify_target.FormattingEnabled = true;
             modify_target.Items.AddRange(new object[] { "WinNumbers", "MegaBall", "Multiplier" });
-            modify_target.Location = new Point(191, 45);
+            modify_target.Location = new Point(195, 101);
             modify_target.Name = "modify_target";
             modify_target.Size = new Size(106, 23);
             modify_target.TabIndex = 7;
@@ -170,7 +262,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(223, 28);
+            label2.Location = new Point(224, 84);
             label2.Name = "label2";
             label2.Size = new Size(39, 15);
             label2.TabIndex = 6;
@@ -234,5 +326,14 @@
         private Label label3;
         private Button fields_num_button;
         private Button max_field_button;
+        private TextBox add_win_numbers_textbox;
+        private TextBox add_mega_ball_textbox;
+        private Label label4;
+        private Label label5;
+        private TextBox add_draw_date_textbox;
+        private Button add_button;
+        private Label label6;
+        private TextBox add_multiplier_textbox;
+        private Label label7;
     }
 }
